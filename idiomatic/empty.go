@@ -1,4 +1,4 @@
-package slicer
+package idiomatic
 
 // TODO: https://www.scala-lang.org/api/3.2.2/scala/collection/Iterable.html#empty-0
 
