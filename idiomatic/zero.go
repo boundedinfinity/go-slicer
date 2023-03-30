@@ -1,4 +1,4 @@
-package slicer
+package idiomatic
 
 import "reflect"
 
