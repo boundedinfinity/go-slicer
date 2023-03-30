@@ -1,10 +1,10 @@
-package slicer_test
+package idiomatic_test
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/boundedinfinity/go-slicer"
+	slicer "github.com/boundedinfinity/go-slicer/idiomatic"
 	"github.com/stretchr/testify/assert"
 )
 
