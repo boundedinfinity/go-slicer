@@ -18,19 +18,23 @@ func Uniq[E comparable](elems ...E) []E {
 }
 
 func UniqBy[E any, C comparable](fn func(E) C, elems ...E) []E {
-	return UniqByI(ignoreIndex1(fn), elems...)
+	fn2 := func(_ int, elem E) C {
+		return fn(elem)
+	}
+	return UniqByI(fn2, elems...)
 }
 
 func UniqByI[E any, C comparable](fn func(int, E) C, elems ...E) []E {
-	wrapper := func(i int, elem E) (C, error) {
+	fn2 := func(i int, elem E) (C, error) {
 		return fn(i, elem), nil
 	}
-
-	return stripErr1(UniqByErrI(wrapper, elems...))
+	output, _ := UniqByErrI(fn2, elems...)
+	return output
 }
 
 func UniqByErr[E any, C comparable](fn func(E) (C, error), elems ...E) ([]E, error) {
-	return UniqByErrI(ignoreIndex1Err(fn), elems...)
+	ignore := func(_ int, elem E) (C, error) { return fn(elem) }
+	return UniqByErrI(ignore, elems...)
 }
 
 func UniqByErrI[E any, C comparable](fn func(int, E) (C, error), elems ...E) ([]E, error) {
