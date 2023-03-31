@@ -24,21 +24,19 @@ func CountErr[E any](fn func(E) (bool, error), elems ...E) (int, error) {
 }
 
 func CountErrI[E any](fn func(int, E) (bool, error), elems ...E) (int, error) {
-	var count int
-	var err error
-	var ok bool
-
-	for i, elem := range elems {
-		ok, err = fn(i, elem)
+	fn2 := func(i, count int, elem E) (int, error) {
+		ok, err := fn(i, elem)
 
 		if err != nil {
-			break
+			return count, err
 		}
 
 		if ok {
 			count++
 		}
+
+		return count, nil
 	}
 
-	return count, err
+	return FoldErrI(0, fn2, elems...)
 }
