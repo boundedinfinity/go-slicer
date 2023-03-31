@@ -47,7 +47,6 @@ func ReduceErrI[I any](fn func(int, I, I) (I, error), items ...I) (I, bool, erro
 	var err error
 
 	if len(items) > 0 {
-
 		output, err = FoldErrI(items[0], fn, items...)
 
 		if err == nil {
