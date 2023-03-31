@@ -1,42 +1,29 @@
 package idiomatic
 
-func Any[T any](fn func(T) bool, elems ...T) bool {
-	for _, elem := range elems {
-		if fn(elem) {
-			return true
-		}
+func Any[E any](fn func(E) bool, elems ...E) bool {
+	fn2 := func(_ int, elem E) (bool, error) {
+		return fn(elem), nil
 	}
-
-	return false
+	output, _ := AnyErrI(fn2, elems...)
+	return output
 }
 
-func AnyI[T any](fn func(int, T) bool, elems ...T) bool {
-	for i, elem := range elems {
-		if fn(i, elem) {
-			return true
-		}
+func AnyI[E any](fn func(int, E) bool, elems ...E) bool {
+	fn2 := func(i int, elem E) (bool, error) {
+		return fn(i, elem), nil
 	}
-
-	return false
+	output, _ := AnyErrI(fn2, elems...)
+	return output
 }
 
-func AnyErr[T any](fn func(T) (bool, error), elems ...T) (bool, error) {
-	for _, elem := range elems {
-		ok, err := fn(elem)
-
-		if err != nil {
-			return false, err
-		}
-
-		if ok {
-			return true, nil
-		}
+func AnyErr[E any](fn func(E) (bool, error), elems ...E) (bool, error) {
+	fn2 := func(_ int, elem E) (bool, error) {
+		return fn(elem)
 	}
-
-	return false, nil
+	return AnyErrI(fn2, elems...)
 }
 
-func AnyErrI[T any](fn func(int, T) (bool, error), elems ...T) (bool, error) {
+func AnyErrI[E any](fn func(int, E) (bool, error), elems ...E) (bool, error) {
 	for i, elem := range elems {
 		ok, err := fn(i, elem)
 
